@@ -19,26 +19,12 @@ function render_header($judul = "Sistem Magang DPRD") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $judul; ?> - DPRD Kota Jogja</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
-    <style>
-        :root { --dprd-blue: #1a2a6c; }
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
-        
-        /* Navbar */
-        .navbar-custom { background: var(--dprd-blue); color: white; }
-        
-        /* Sidebar */
-        .sidebar { min-height: 100vh; background: white; border-right: 1px solid #dee2e6; }
-        .nav-link { color: #333; padding: 12px 20px; border-bottom: 1px solid #f1f1f1; }
-        .nav-link:hover { background: #f8f9fa; color: var(--dprd-blue); }
-        .nav-link.active { background: #e9ecef; color: var(--dprd-blue); font-weight: bold; }
-        
-        /* Content Area */
-        main { padding-top: 20px; }
-        .card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>">
 </head>
 <body>
 
@@ -82,7 +68,9 @@ function render_header($judul = "Sistem Magang DPRD") {
             </div>
         </nav>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 min-vh-100 d-flex flex-column">
+            
+            <div class="flex-grow-1 pt-4">
 <?php
 }
 
@@ -91,16 +79,11 @@ function render_header($judul = "Sistem Magang DPRD") {
  */
 function render_footer() {
 ?>
-        </main>
-    </div>
-</div>
+            </div> <footer class="py-3 bg-white border-top text-center mt-auto">
+                <span class="text-muted small">&copy; 2026 Sekretariat DPRD Kota Yogyakarta</span>
+            </footer>
 
-<footer class="footer mt-auto py-3 bg-white border-top text-center mt-5">
-    <div class="container">
-        <span class="text-muted small">&copy; 2026 Sekretariat DPRD Kota Yogyakarta</span>
-    </div>
-</footer>
-
+        </main> </div> </div> <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('assets/js/script.js'); ?>"></script>
 

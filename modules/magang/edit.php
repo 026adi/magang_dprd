@@ -44,6 +44,10 @@ $query_bagian = mysqli_query($koneksi, "SELECT * FROM bagian");
                         <label class="form-label">Jurusan</label>
                         <input type="text" name="jurusan" class="form-control" value="<?= $data['jurusan']; ?>" required>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">No. HP / WhatsApp</label>
+                        <input type="text" name="no_hp" class="form-control" value="<?= $data['no_hp']; ?>" required placeholder="Contoh: 08123456789">
+                    </div>
                 </div>
 
                 <div class="col-md-6">
@@ -58,16 +62,27 @@ $query_bagian = mysqli_query($koneksi, "SELECT * FROM bagian");
                             <?php endwhile; ?>
                         </select>
                     </div>
+                    
                     <div class="mb-3">
                         <label class="form-label">Ganti Foto Profil (Kosongkan jika tidak diganti)</label>
                         <input type="file" name="foto" class="form-control" accept="image/*">
-                        <small class="text-muted">File saat ini: <?= $data['foto']; ?></small>
+                        <div class="mt-2">
+                            <small class="text-muted d-block mb-1">Foto saat ini:</small>
+                            <img src="../../assets/uploads/foto/<?= $data['foto']; ?>" width="80" class="img-thumbnail rounded">
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">Ganti Surat Magang (PDF - Kosongkan jika tidak diganti)</label>
                         <input type="file" name="surat_magang" class="form-control" accept="application/pdf">
-                        <small class="text-muted">File saat ini: <?= $data['surat_magang']; ?></small>
+                        <div class="mt-2">
+                            <small class="text-muted">File saat ini: </small>
+                            <a href="../../assets/uploads/surat/<?= $data['surat_magang']; ?>" target="_blank" class="text-decoration-none">
+                                <i class="bi bi-file-pdf text-danger"></i> <?= $data['surat_magang']; ?>
+                            </a>
+                        </div>
                     </div>
+
                     <div class="row">
                         <div class="col">
                             <label class="form-label">Tanggal Mulai</label>
@@ -83,7 +98,9 @@ $query_bagian = mysqli_query($koneksi, "SELECT * FROM bagian");
 
             <hr>
             <div class="text-end">
-                <button type="submit" name="update" class="btn btn-warning px-4 text-white">Update Data</button>
+                <button type="submit" name="update" class="btn btn-warning px-4 text-white">
+                    <i class="bi bi-save me-1"></i> Update Data
+                </button>
             </div>
         </form>
     </div>

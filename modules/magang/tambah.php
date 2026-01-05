@@ -33,6 +33,10 @@ $query_bagian = mysqli_query($koneksi, "SELECT * FROM bagian");
                         <label class="form-label">Jurusan</label>
                         <input type="text" name="jurusan" class="form-control" required placeholder="Contoh: Teknik Informatika">
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">No. HP / WhatsApp</label>
+                        <input type="text" name="no_hp" class="form-control" required placeholder="Contoh: 081234567890">
+                    </div>
                 </div>
 
                 <div class="col-md-6">

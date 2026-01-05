@@ -9,6 +9,7 @@ if (isset($_POST['simpan'])) {
     $nim       = $_POST['nim_nis'];
     $univ      = $_POST['universitas_instansi'];
     $jurusan   = $_POST['jurusan'];
+    $no_hp     = $_POST['no_hp']; // <-- TAMBAHAN: Tangkap No HP
     $id_bagian = $_POST['id_bagian'];
     $tgl_awal  = $_POST['tgl_mulai'];
     $tgl_akhir = $_POST['tgl_selesai'];
@@ -28,10 +29,11 @@ if (isset($_POST['simpan'])) {
     $path_surat = "../../assets/uploads/surat/" . $surat_baru;
 
     if (move_uploaded_file($foto_tmp, $path_foto) && move_uploaded_file($surat_tmp, $path_surat)) {
+        // Query Insert (Tambahkan no_hp)
         $query = "INSERT INTO anak_magang 
-                  (nama_lengkap, nim_nis, universitas_instansi, jurusan, tgl_mulai, tgl_selesai, id_bagian, foto, surat_magang) 
+                  (nama_lengkap, nim_nis, universitas_instansi, jurusan, no_hp, tgl_mulai, tgl_selesai, id_bagian, foto, surat_magang) 
                   VALUES 
-                  ('$nama', '$nim', '$univ', '$jurusan', '$tgl_awal', '$tgl_akhir', '$id_bagian', '$foto_baru', '$surat_baru')";
+                  ('$nama', '$nim', '$univ', '$jurusan', '$no_hp', '$tgl_awal', '$tgl_akhir', '$id_bagian', '$foto_baru', '$surat_baru')";
         
         if (mysqli_query($koneksi, $query)) {
             header("location:index.php?pesan=sukses");
@@ -52,6 +54,7 @@ else if (isset($_POST['update'])) {
     $nim       = $_POST['nim_nis'];
     $univ      = $_POST['universitas_instansi'];
     $jurusan   = $_POST['jurusan'];
+    $no_hp     = $_POST['no_hp']; // <-- TAMBAHAN: Update No HP juga
     $id_bagian = $_POST['id_bagian'];
     $tgl_awal  = $_POST['tgl_mulai'];
     $tgl_akhir = $_POST['tgl_selesai'];
@@ -64,29 +67,28 @@ else if (isset($_POST['update'])) {
     if ($_FILES['foto']['name'] != "") {
         $foto_baru = "FOTO_" . time() . "_" . $_FILES['foto']['name'];
         move_uploaded_file($_FILES['foto']['tmp_name'], "../../assets/uploads/foto/" . $foto_baru);
-        // Hapus file lama
         if (file_exists("../../assets/uploads/foto/" . $old['foto'])) {
             unlink("../../assets/uploads/foto/" . $old['foto']);
         }
     } else {
-        $foto_baru = $old['foto']; // Pakai foto lama
+        $foto_baru = $old['foto']; 
     }
 
     // Cek apakah ada upload SURAT baru
     if ($_FILES['surat_magang']['name'] != "") {
         $surat_baru = "SURAT_" . time() . "_" . $_FILES['surat_magang']['name'];
         move_uploaded_file($_FILES['surat_magang']['tmp_name'], "../../assets/uploads/surat/" . $surat_baru);
-        // Hapus file lama
         if (file_exists("../../assets/uploads/surat/" . $old['surat_magang'])) {
             unlink("../../assets/uploads/surat/" . $old['surat_magang']);
         }
     } else {
-        $surat_baru = $old['surat_magang']; // Pakai surat lama
+        $surat_baru = $old['surat_magang']; 
     }
 
+    // Query Update (Tambahkan no_hp)
     $query = "UPDATE anak_magang SET 
               nama_lengkap='$nama', nim_nis='$nim', universitas_instansi='$univ', 
-              jurusan='$jurusan', tgl_mulai='$tgl_awal', tgl_selesai='$tgl_akhir', 
+              jurusan='$jurusan', no_hp='$no_hp', tgl_mulai='$tgl_awal', tgl_selesai='$tgl_akhir', 
               id_bagian='$id_bagian', foto='$foto_baru', surat_magang='$surat_baru' 
               WHERE id_magang='$id'";
 
@@ -107,7 +109,6 @@ else if (isset($_GET['aksi']) && $_GET['aksi'] == "hapus") {
     $cek_data = mysqli_query($koneksi, "SELECT * FROM anak_magang WHERE id_magang='$id'");
     $data     = mysqli_fetch_assoc($cek_data);
 
-    // Hapus file fisik
     if (file_exists("../../assets/uploads/foto/" . $data['foto'])) {
         unlink("../../assets/uploads/foto/" . $data['foto']);
     }
@@ -115,7 +116,6 @@ else if (isset($_GET['aksi']) && $_GET['aksi'] == "hapus") {
         unlink("../../assets/uploads/surat/" . $data['surat_magang']);
     }
 
-    // Hapus data dari database
     $query = "DELETE FROM anak_magang WHERE id_magang='$id'";
     if (mysqli_query($koneksi, $query)) {
         header("location:index.php?pesan=hapus");
