@@ -2,7 +2,7 @@
 require_once '../../includes/layout.php'; 
 render_header("Data Anak Magang"); 
 
-// Query untuk mengambil data magang dan menggabungkan dengan tabel bagian
+// Query mengambil semua data
 $query = mysqli_query($koneksi, "SELECT anak_magang.*, bagian.nama_bagian 
                                  FROM anak_magang 
                                  LEFT JOIN bagian ON anak_magang.id_bagian = bagian.id_bagian 
@@ -28,9 +28,11 @@ $query = mysqli_query($koneksi, "SELECT anak_magang.*, bagian.nama_bagian
                 <thead class="table-light">
                     <tr>
                         <th>No</th>
-                        <th>Foto</th>
                         <th>Nama Lengkap</th>
-                        <th>Instansi & Jurusan</th>
+                        
+                        <th>Instansi</th>
+                        <th>Fakultas</th>
+                        <th>Jurusan</th>
                         <th>Penempatan</th>
                         <th>Status</th>
                         <th class="text-center">Aksi</th>
@@ -41,20 +43,33 @@ $query = mysqli_query($koneksi, "SELECT anak_magang.*, bagian.nama_bagian
                     <tr>
                         <td><?= $no++; ?></td>
                         <td>
-                            <img src="../../assets/uploads/foto/<?= $row['foto']; ?>" class="rounded-circle" width="45" height="45" style="object-fit: cover;">
-                        </td>
-                        <td>
                             <strong><?= $row['nama_lengkap']; ?></strong><br>
                             <small class="text-muted"><?= $row['nim_nis']; ?></small>
                         </td>
-                        <td>
-                            <?= $row['universitas_instansi']; ?><br>
-                            <small class="text-primary"><?= $row['jurusan']; ?></small>
-                        </td>
+                        
+                        <td><?= $row['universitas_instansi']; ?></td>
+                        
+                        <td><?= !empty($row['fakultas']) ? $row['fakultas'] : '-'; ?></td>
+                        
+                        <td><?= $row['jurusan']; ?></td>
+                        
                         <td><span class="badge bg-info text-dark"><?= $row['nama_bagian'] ?? 'Belum Diatur'; ?></span></td>
+                        
                         <td>
-                            <span class="badge <?= ($row['status'] == 'Aktif') ? 'bg-success' : 'bg-secondary'; ?>">
-                                <?= $row['status']; ?>
+                            <?php 
+                            if ($row['status'] == 'Aktif') {
+                                $badge_class = 'bg-success'; 
+                                $icon_status = '<i class="bi bi-check-circle me-1"></i>';
+                            } elseif ($row['status'] == 'Menunggu') {
+                                $badge_class = 'bg-warning text-dark'; 
+                                $icon_status = '<i class="bi bi-hourglass-split me-1"></i>';
+                            } else { 
+                                $badge_class = 'bg-secondary'; 
+                                $icon_status = '<i class="bi bi-flag-fill me-1"></i>';
+                            }
+                            ?>
+                            <span class="badge <?= $badge_class; ?> p-2">
+                                <?= $icon_status . $row['status']; ?>
                             </span>
                         </td>
                         <td class="text-center">
