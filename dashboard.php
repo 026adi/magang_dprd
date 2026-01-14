@@ -21,8 +21,9 @@ $t_bagian   = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM bagian"));
 </div>
 
 <div class="row">
-    <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-dark h-100">
+    
+    <div class="col-md-4 mb-3">
+        <div class="card bg-warning text-dark h-100 shadow-sm position-relative hover-scale">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -32,12 +33,13 @@ $t_bagian   = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM bagian"));
                     </div>
                     <i class="bi bi-hourglass-split fs-1 opacity-50"></i>
                 </div>
+                <a href="modules/magang/index.php?status=Menunggu" class="stretched-link"></a>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3 mb-3">
-        <div class="card bg-primary text-white h-100">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-primary text-white h-100 shadow-sm position-relative hover-scale">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -47,27 +49,13 @@ $t_bagian   = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM bagian"));
                     </div>
                     <i class="bi bi-people-fill fs-1 opacity-50"></i>
                 </div>
+                <a href="modules/magang/index.php?status=Aktif" class="stretched-link"></a>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white h-100">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="text-uppercase mb-1">Selesai Magang</h6>
-                        <h2 class="mb-0 fw-bold"><?= $m_selesai; ?></h2>
-                        <small style="font-size: 0.8rem;">Alumni</small>
-                    </div>
-                    <i class="bi bi-person-check-fill fs-1 opacity-50"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 mb-3">
-        <div class="card bg-dark text-white h-100">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-dark text-white h-100 shadow-sm position-relative hover-scale">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -77,6 +65,7 @@ $t_bagian   = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM bagian"));
                     </div>
                     <i class="bi bi-diagram-3-fill fs-1 opacity-50"></i>
                 </div>
+                <a href="modules/bagian/index.php" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -90,5 +79,16 @@ $t_bagian   = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM bagian"));
         <a href="modules/magang/index.php" class="btn btn-outline-primary mt-2">Mulai Kelola Data</a>
     </div>
 </div>
+
+<style>
+    .hover-scale {
+        transition: transform 0.2s;
+        cursor: pointer;
+    }
+    .hover-scale:hover {
+        transform: translateY(-5px); /* Efek naik dikit pas di-hover */
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+</style>
 
 <?php render_footer(); ?>

@@ -154,7 +154,7 @@ if (isset($_POST['login'])) {
         <form method="POST">
             <div class="mb-3">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control" placeholder="admin_dprd" required>
+                <input type="text" name="username" class="form-control" placeholder="admin" required>
             </div>
             <div class="mb-4">
                 <label>Password</label>
