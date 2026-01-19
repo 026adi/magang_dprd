@@ -94,7 +94,6 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
 
 <body>
 
-    <!-- ================= HEADER WORD ================= -->
     <div style="mso-element:header" id="h1">
         <table>
             <tr>
@@ -116,11 +115,8 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
         </table>
         <hr style="border:3px double #000;">
     </div>
-    <!-- =============================================== -->
-
     <div class="Section1">
 
-        <!-- ================= ISI SURAT ================= -->
         <table style="margin-top:20px;">
             <tr>
                 <td width="60%"></td>
@@ -128,7 +124,7 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
                     <p>Yogyakarta, <?= tgl_indo(date('Y-m-d')); ?></p><br>
                     <p>Kepada</p>
                     <p>
-                        Yth. Wakil Dekan Fakultas Teknik Industri<br>
+                        Yth. Wakil Dekan Bidang Akademik <?= !empty($d['fakultas']) ? $d['fakultas'] : 'Pimpinan Fakultas/Prodi'; ?><br>
                         <?= $d['universitas_instansi']; ?><br>
                         di Yogyakarta
                     </p>
@@ -150,12 +146,12 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
             <tr>
                 <td>Hal.</td>
                 <td>:</td>
-                <td class="bold">Jawaban Izin Magang</td>
+                <td>Jawaban Izin Magang</td>
             </tr>
         </table>
 
         <p class="indent" style="margin-top:12px; text-align:justify;">
-            Menindaklanjuti Surat dari Dekan Akademik <?= $d['universitas_instansi']; ?>,
+            Menindaklanjuti Surat dari <?= !empty($d['fakultas']) ? $d['fakultas'] : 'Pimpinan'; ?> <?= $d['universitas_instansi']; ?>,
             Tanggal ____________,
             Nomor Surat ____________,
             perihal permohonan izin magang, bersama ini kami sampaikan bahwa
@@ -173,7 +169,7 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
             <tr>
                 <td width="25%">Nama</td>
                 <td width="2%">:</td>
-                <td><b><?= $d['nama_lengkap']; ?></b></td>
+                <td><?= $d['nama_lengkap']; ?></td>
             </tr>
             <tr>
                 <td>NIM / NIS</td>
@@ -192,7 +188,6 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
             </tr>
         </table>
 
-        <!-- JARAK LEBIH LEGA KE TTD -->
         <p class="indent" style="margin-top:25px; margin-bottom:30px;">
             Demikian atas perhatian dan kerjasamanya kami ucapkan terima kasih.
         </p>
@@ -202,15 +197,12 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
                 <td width="50%"></td>
                 <td width="50%" class="center">
                     <p style="margin:0;">Sekretaris DPRD Kota Yogyakarta</p>
-                    <p style="margin:0;">Bagian Administrasi Umum</p>
                 </td>
             </tr>
 
-            <!-- SPACER ROW: pasti di-respect Word -->
             <tr>
                 <td></td>
-                <td style="height:100px;"></td> <!-- ubah 40px sesuai kebutuhan -->
-            </tr>
+                <td style="height:100px;"></td> </tr>
 
             <tr>
                 <td></td>
@@ -221,14 +213,11 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
                     <p style="margin:0;">NIP. 19710630 199603 1 003</p>
                 </td>
             </tr>
-        </table> <!-- AKHIR TTD -->
-
-        <p style="line-height:60px; margin:0;">&nbsp;</p>
+        </table> <p style="line-height:60px; margin:0;">&nbsp;</p>
 
     </div>
 
     <div id="f1">
-        <!-- ================= FOOTER WORD ================= -->
         <table>
             <tr>
                 <td width="0%" align="center">
@@ -244,8 +233,5 @@ header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
             </tr>
         </table>
     </div>
-    <!-- =============================================== -->
-
-</body>
-
+    </body>
 </html>
