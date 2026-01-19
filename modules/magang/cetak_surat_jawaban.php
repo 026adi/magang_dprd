@@ -2,21 +2,33 @@
 include_once '../../config/koneksi.php';
 
 $id = $_GET['id'];
-$query = mysqli_query($koneksi, "SELECT anak_magang.*, bagian.nama_bagian 
-FROM anak_magang 
-LEFT JOIN bagian ON anak_magang.id_bagian = bagian.id_bagian 
-WHERE id_magang = '$id'");
+$query = mysqli_query($koneksi, "
+    SELECT anak_magang.*, bagian.nama_bagian
+    FROM anak_magang
+    LEFT JOIN bagian ON anak_magang.id_bagian = bagian.id_bagian
+    WHERE id_magang = '$id'
+");
 $d = mysqli_fetch_assoc($query);
 
 function tgl_indo($tanggal)
 {
-    $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    $bulan = [
+        1 => 'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    ];
     $p = explode('-', $tanggal);
     return $p[2] . ' ' . $bulan[(int)$p[1]] . ' ' . $p[0];
 }
-
-header("Content-Type: application/vnd.ms-word");
-header("Content-Disposition: attachment; filename=Surat_Jawaban.doc");
 
 function img64($path)
 {
@@ -28,6 +40,9 @@ function img64($path)
 $logo   = img64('../../assets/img/logo.jpeg');
 $aksara = img64('../../assets/img/aksara.jpeg');
 $segoro = img64('../../assets/img/segoro.jpeg');
+
+header("Content-Type: application/vnd.ms-word");
+header("Content-Disposition: attachment; filename=Surat_Jawaban_Magang.doc");
 ?>
 
 <html xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -74,76 +89,46 @@ $segoro = img64('../../assets/img/segoro.jpeg');
         .bold {
             font-weight: bold;
         }
-
-        .kop h3 {
-            font-size: 14pt;
-            margin: 0;
-        }
-
-        .kop h2 {
-            font-size: 18pt;
-            margin: 0;
-        }
-
-        .kop p {
-            font-size: 10pt;
-            line-height: 1.2;
-        }
-
-        .garis {
-            border-bottom: 3px double #000;
-            margin-top: 6px;
-        }
-
-        .slogan-title {
-            font-size: 9pt;
-            font-weight: bold;
-        }
-
-        .slogan-desc {
-            font-size: 8pt;
-            line-height: 1.2;
-        }
     </style>
 </head>
 
 <body>
+
+    <!-- ================= HEADER WORD ================= -->
+    <div style="mso-element:header" id="h1">
+        <table>
+            <tr>
+                <td width="0%" align="center">
+                    <img src="<?= $logo ?>" width="85">
+                </td>
+                <td width="100%" align="center">
+                    <p style="font-size:14pt;font-weight:bold;">PEMERINTAH KOTA YOGYAKARTA</p>
+                    <p style="font-size:18pt;font-weight:bold;">SEKRETARIAT DPRD</p>
+                    <img src="<?= $aksara ?>" height="20"><br>
+                    <p style="font-size:10pt;line-height:1.2;">
+                        Jl. Ipda Tut Harsono No. 43 Yogyakarta Kode Pos 55165<br>
+                        Telp. (0274) 540650 Fax. (0274) 540651<br>
+                        EMAIL : dprd@jogjakota.go.id<br>
+                        WEBSITE : www.setwan.jogjakota.go.id
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <hr style="border:3px double #000;">
+    </div>
+    <!-- =============================================== -->
+
     <div class="Section1">
 
-        <!-- ================= HEADER ================= -->
-        <div style="mso-element:header" id="h1">
-            <table class="kop">
-                <tr>
-                    <td width="15%" align="center">
-                        <img src="<?= $logo ?>" width="85">
-                    </td>
-                    <td width="85%" class="center">
-                        <h3>PEMERINTAH KOTA YOGYAKARTA</h3>
-                        <h2>SEKRETARIAT DPRD</h2>
-                        <img src="<?= $aksara ?>" height="20"><br>
-                        <p>
-                            Jl. Ipda Tut Harsono No. 43 Yogyakarta Kode Pos 55165<br>
-                            Telp. (0274) 540650 Fax. (0274) 540651<br>
-                            EMAIL : dprd@jogjakota.go.id<br>
-                            HOTLINE SMS : 08122780001 HOTLINE EMAIL : upik@jogjakota.go.id<br>
-                            WEBSITE : www.setwan.jogjakota.go.id
-                        </p>
-                    </td>
-                </tr>
-            </table>
-            <div class="garis"></div>
-        </div>
-        <!-- ========================================= -->
-
-        <!-- ISI SURAT -->
+        <!-- ================= ISI SURAT ================= -->
         <table style="margin-top:20px;">
             <tr>
-                <td width="55%"></td>
-                <td width="45%">
+                <td width="60%"></td>
+                <td width="40%">
                     <p>Yogyakarta, <?= tgl_indo(date('Y-m-d')); ?></p><br>
                     <p>Kepada</p>
                     <p>
-                        Yth. Dekan Fakultas Teknik Industri<br>
+                        Yth. Wakil Dekan Fakultas Teknik Industri<br>
                         <?= $d['universitas_instansi']; ?><br>
                         di Yogyakarta
                     </p>
@@ -169,18 +154,22 @@ $segoro = img64('../../assets/img/segoro.jpeg');
             </tr>
         </table>
 
-        <p class="indent" style="margin-top:10px;">
-            Menindaklanjuti Surat dari <b><?= $d['universitas_instansi']; ?></b> perihal permohonan izin magang,
-            bersama ini kami sampaikan bahwa:
+        <p class="indent" style="margin-top:12px; text-align:justify;">
+            Menindaklanjuti Surat dari Dekan Akademik <?= $d['universitas_instansi']; ?>,
+            Tanggal ____________,
+            Nomor Surat ____________,
+            perihal permohonan izin magang, bersama ini kami sampaikan bahwa
+            Sekretariat DPRD Kota Yogyakarta bersedia menerima mahasiswa sebagaimana tersebut di bawah ini
+            untuk melaksanakan magang di Sekretariat DPRD Kota Yogyakarta
+            terhitung mulai tanggal <?= tgl_indo($d['tgl_mulai']); ?> s.d. <?= tgl_indo($d['tgl_selesai']); ?>.
         </p>
 
-        <p class="indent">
-            Sekretariat DPRD Kota Yogyakarta <b>BERSEDIA MENERIMA</b> mahasiswa untuk melaksanakan magang
-            terhitung mulai tanggal <b><?= tgl_indo($d['tgl_mulai']); ?> s.d. <?= tgl_indo($d['tgl_selesai']); ?></b>.
-            Adapun data peserta sebagai berikut:
+        <p class="indent" style="margin-top:6px;">
+            Adapun mahasiswa tersebut adalah:
         </p>
 
-        <table style="margin-left:40px; margin-top:8px;">
+
+        <table style="margin-left:40px;margin-top:8px;">
             <tr>
                 <td width="25%">Nama</td>
                 <td width="2%">:</td>
@@ -203,43 +192,60 @@ $segoro = img64('../../assets/img/segoro.jpeg');
             </tr>
         </table>
 
-        <p class="indent" style="margin-top:10px;">
+        <!-- JARAK LEBIH LEGA KE TTD -->
+        <p class="indent" style="margin-top:25px; margin-bottom:30px;">
             Demikian atas perhatian dan kerjasamanya kami ucapkan terima kasih.
         </p>
 
-        <table style="margin-top:30px;">
+        <table>
             <tr>
                 <td width="50%"></td>
                 <td width="50%" class="center">
-                    <p>Plt. Sekretaris DPRD Kota Yogyakarta</p>
-                    <p>Bagian Administrasi Umum</p><br><br><br>
-                    <p class="bold"><u>ANTONIUS BAMBANG AGUNG ADRIJANTO, S.I.P</u></p>
-                    <p>NIP. 19710630 199603 1 003</p>
+                    <p style="margin:0;">Sekretaris DPRD Kota Yogyakarta</p>
+                    <p style="margin:0;">Bagian Administrasi Umum</p>
+                </td>
+            </tr>
+
+            <!-- SPACER ROW: pasti di-respect Word -->
+            <tr>
+                <td></td>
+                <td style="height:100px;"></td> <!-- ubah 40px sesuai kebutuhan -->
+            </tr>
+
+            <tr>
+                <td></td>
+                <td class="center">
+                    <p style="margin:0; text-decoration:underline;">
+                        A.BAMBANG AGUNG ADRIJANTO, S.I.P
+                    </p>
+                    <p style="margin:0;">NIP. 19710630 199603 1 003</p>
+                </td>
+            </tr>
+        </table> <!-- AKHIR TTD -->
+
+        <p style="line-height:60px; margin:0;">&nbsp;</p>
+
+    </div>
+
+    <div id="f1">
+        <!-- ================= FOOTER WORD ================= -->
+        <table>
+            <tr>
+                <td width="0%" align="center">
+                    <img src="<?= $segoro ?>" width="65">
+                </td>
+                <td width="100%" align="center">
+                    <p style="font-size:9pt;font-weight:bold;">SEGOROAMARTO</p>
+                    <p style="font-size:8pt;line-height:1.2;">
+                        SEMANGAT GOTONG ROYONG AGAWE MAJUNE NGAYOGYAKARTO<br>
+                        KEMANDIRIAN - KEDISIPLINAN - KEPEDULIAN - KEBERSAMAAN
+                    </p>
                 </td>
             </tr>
         </table>
-
-        <!-- ================= FOOTER ================= -->
-        <div style="mso-element:footer" id="f1">
-            <table>
-                <tr>
-                    <td width="15%" align="center">
-                        <img src="<?= $segoro ?>" width="60">
-                    </td>
-                    <td width="85%" class="center">
-                        <div class="slogan-title">SEGOROAMARTO</div>
-                        <p class="slogan-desc">
-                            SEMANGAT GOTONG ROYONG AGAWE MAJUNE<br>
-                            NGAYOGYAKARTO KEMANDIRIAN - KEDISIPLINAN -<br>
-                            KEPEDULIAN - KEBERSAMAAN
-                        </p>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <!-- ========================================= -->
-
     </div>
+    <!-- =============================================== -->
+
 </body>
 
 </html>
