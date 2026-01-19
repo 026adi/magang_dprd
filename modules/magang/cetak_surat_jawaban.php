@@ -1,146 +1,161 @@
 <?php
 include_once '../../config/koneksi.php';
 
-// Ambil ID dari URL
 $id = $_GET['id'];
-
-// Ambil Data Anak Magang & Bagian
-// Pastikan kolom 'fakultas' sudah ditambahkan di database (ALTER TABLE)
 $query = mysqli_query($koneksi, "SELECT anak_magang.*, bagian.nama_bagian 
-                                 FROM anak_magang 
-                                 LEFT JOIN bagian ON anak_magang.id_bagian = bagian.id_bagian 
-                                 WHERE id_magang = '$id'");
+FROM anak_magang 
+LEFT JOIN bagian ON anak_magang.id_bagian = bagian.id_bagian 
+WHERE id_magang = '$id'");
 $d = mysqli_fetch_assoc($query);
 
-// Fungsi Format Tanggal Indonesia
-function tgl_indo($tanggal){
-    $bulan = array (
-        1 =>   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-    );
-    $pecahkan = explode('-', $tanggal);
-    return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+function tgl_indo($tanggal)
+{
+    $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    $p = explode('-', $tanggal);
+    return $p[2] . ' ' . $bulan[(int)$p[1]] . ' ' . $p[0];
 }
+
+header("Content-Type: application/vnd.ms-word");
+header("Content-Disposition: attachment; filename=Surat_Jawaban.doc");
+
+function img64($path)
+{
+    if (!file_exists($path)) return '';
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    return 'data:image/' . $type . ';base64,' . base64_encode(file_get_contents($path));
+}
+
+$logo   = img64('../../assets/img/logo.jpeg');
+$aksara = img64('../../assets/img/aksara.jpeg');
+$segoro = img64('../../assets/img/segoro.jpeg');
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:w="urn:schemas-microsoft-com:office:word"
+    xmlns="http://www.w3.org/TR/REC-html40">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Surat Jawaban Magang - <?= $d['nama_lengkap']; ?></title>
+    <meta charset="utf-8">
     <style>
-        /* Reset dan Font Standar Surat */
-        body { 
-            font-family: "Times New Roman", Times, serif; 
-            font-size: 12pt; 
-            background-color: #FAFAFA; 
-            margin: 0; 
-            padding: 0; 
+        @page Section1 {
+            size: 21.59cm 33.02cm;
+            margin: 2.5cm 2.5cm 3cm 3cm;
+            mso-header: h1;
+            mso-footer: f1;
         }
 
-        /* Konfigurasi Kertas A4 */
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 20mm;
-            margin: 10mm auto;
-            border: 1px solid #D3D3D3;
-            background: white;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            position: relative;
+        div.Section1 {
+            page: Section1;
         }
 
-        /* Settingan saat di-Print */
-        @media print {
-            body { background: white; }
-            .page { margin: 0; border: none; width: auto; height: auto; box-shadow: none; padding: 0; }
-            .no-print { display: none; }
-            @page { size: A4; margin: 2.5cm 2cm 2cm 2.5cm; } /* Margin atas-kiri-bawah-kanan */
+        body {
+            font-family: "Times New Roman";
+            font-size: 12pt;
+            line-height: 1.35;
         }
 
-        /* --- KOP SURAT --- */
-        .header { text-align: center; margin-bottom: 5px; }
-        .header h3 { margin: 0; font-size: 14pt; font-weight: normal; text-transform: uppercase; letter-spacing: 1px; }
-        .header h2 { margin: 0; font-size: 18pt; font-weight: bold; text-transform: uppercase; margin-top: 5px; }
-        .header p { margin: 0; font-size: 10pt; line-height: 1.3; }
-        
-        /* Garis Kop Surat */
-        .garis-kop {
-            border-top: 4px solid black;
-            border-bottom: 1px solid black;
-            height: 2px;
-            margin-top: 10px;
-            margin-bottom: 25px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        /* --- ISI SURAT --- */
-        .tgl-surat { float: right; margin-bottom: 10px; }
-        
-        .tabel-info { width: 100%; margin-bottom: 20px; }
-        .tabel-info td { vertical-align: top; }
-
-        .isi-surat { text-align: justify; line-height: 1.5; margin-bottom: 20px; }
-        .isi-surat p { margin-bottom: 10px; }
-
-        /* Tabel Data Mahasiswa */
-        .tabel-siswa { width: 100%; margin-left: 20px; margin-bottom: 20px; }
-        .tabel-siswa td { padding: 2px 5px; vertical-align: top; }
-
-        /* --- TANDA TANGAN --- */
-        .ttd-container { 
-            float: right; 
-            width: 300px; 
-            text-align: left; 
-            margin-top: 30px; 
+        p {
+            margin: 0;
         }
-        .ttd-jabatan { margin-bottom: 70px; } 
-        .ttd-nama { font-weight: bold; text-decoration: underline; }
+
+        .indent {
+            text-indent: 1.25cm;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .kop h3 {
+            font-size: 14pt;
+            margin: 0;
+        }
+
+        .kop h2 {
+            font-size: 18pt;
+            margin: 0;
+        }
+
+        .kop p {
+            font-size: 10pt;
+            line-height: 1.2;
+        }
+
+        .garis {
+            border-bottom: 3px double #000;
+            margin-top: 6px;
+        }
+
+        .slogan-title {
+            font-size: 9pt;
+            font-weight: bold;
+        }
+
+        .slogan-desc {
+            font-size: 8pt;
+            line-height: 1.2;
+        }
     </style>
 </head>
+
 <body>
+    <div class="Section1">
 
-    <div class="no-print" style="text-align: center; padding: 20px; background: #333;">
-        <button onclick="window.print()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 16px;">🖨️ Cetak Surat / Simpan PDF</button>
-        <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer; font-size: 16px;">❌ Tutup Tab</button>
-    </div>
-
-    <div class="page">
-        <div class="header">
-            <h3>PEMERINTAH KOTA YOGYAKARTA</h3>
-            <h2>SEKRETARIAT DPRD</h2>
-            <p>Jl. IPDA Tut Harsono No. 43 Yogyakarta Kode Pos 55165</p>
-            <p>Telp. (0274) 540650 Fax. (0274) 540651</p>
-            <p>EMAIL: dprd@jogjakota.go.id</p>
-            <p>HOTLINE SMS: 08122780001 HOTLINE EMAIL: upik@jogjakota.go.id</p>
-            <p>WEBSITE: www.setwan.jogjakota.go.id</p>
+        <!-- ================= HEADER ================= -->
+        <div style="mso-element:header" id="h1">
+            <table class="kop">
+                <tr>
+                    <td width="15%" align="center">
+                        <img src="<?= $logo ?>" width="85">
+                    </td>
+                    <td width="85%" class="center">
+                        <h3>PEMERINTAH KOTA YOGYAKARTA</h3>
+                        <h2>SEKRETARIAT DPRD</h2>
+                        <img src="<?= $aksara ?>" height="20"><br>
+                        <p>
+                            Jl. Ipda Tut Harsono No. 43 Yogyakarta Kode Pos 55165<br>
+                            Telp. (0274) 540650 Fax. (0274) 540651<br>
+                            EMAIL : dprd@jogjakota.go.id<br>
+                            HOTLINE SMS : 08122780001 HOTLINE EMAIL : upik@jogjakota.go.id<br>
+                            WEBSITE : www.setwan.jogjakota.go.id
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <div class="garis"></div>
         </div>
-        <div class="garis-kop"></div>
+        <!-- ========================================= -->
 
-        <div class="tgl-surat">
-            Yogyakarta, <?= tgl_indo(date('Y-m-d')); ?>
-        </div>
-        <div style="clear: both;"></div>
-
-        <table class="tabel-info" style="width: 60%;">
+        <!-- ISI SURAT -->
+        <table style="margin-top:20px;">
             <tr>
-                <td width="80px">Kepada</td>
-                <td width="10px">:</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    Yth. <?= !empty($d['fakultas']) ? "Dekan " . $d['fakultas'] : "Kepala Sekolah"; ?> <br>
-                    <strong><?= $d['universitas_instansi']; ?></strong><br>
-                    Di Tempat
+                <td width="55%"></td>
+                <td width="45%">
+                    <p>Yogyakarta, <?= tgl_indo(date('Y-m-d')); ?></p><br>
+                    <p>Kepada</p>
+                    <p>
+                        Yth. Dekan Fakultas Teknik Industri<br>
+                        <?= $d['universitas_instansi']; ?><br>
+                        di Yogyakarta
+                    </p>
                 </td>
             </tr>
         </table>
 
-        <table class="tabel-info" style="width: 100%; margin-top: 20px;">
+        <table style="margin-top:10px;">
             <tr>
-                <td width="80px">No.</td>
-                <td width="10px">:</td>
-                <td>500.15.6 / .....</td> 
+                <td width="10%">No.</td>
+                <td width="2%">:</td>
+                <td>500.15.6 / ....</td>
             </tr>
             <tr>
                 <td>Lamp.</td>
@@ -150,47 +165,81 @@ function tgl_indo($tanggal){
             <tr>
                 <td>Hal.</td>
                 <td>:</td>
-                <td><strong>Jawaban Izin Magang</strong></td>
+                <td class="bold">Jawaban Izin Magang</td>
             </tr>
         </table>
 
-        <div class="isi-surat">
-            <p>
-                Menindaklanjuti Surat dari <strong><?= !empty($d['fakultas']) ? "Dekan " . $d['fakultas'] : "Kepala Sekolah"; ?> <?= $d['universitas_instansi']; ?></strong> 
-                perihal izin kerja praktik / magang, bersama ini kami sampaikan Sekretariat DPRD Kota Yogyakarta <strong>bersedia menerima</strong> mahasiswa/siswa 
-                sebagaimana tersebut di bawah ini untuk melaksanakan magang di Sekretariat DPRD Kota Yogyakarta 
-                terhitung mulai tanggal <strong><?= tgl_indo($d['tgl_mulai']); ?> s.d <?= tgl_indo($d['tgl_selesai']); ?></strong>.
-            </p>
-            <p>Adapun data peserta tersebut adalah:</p>
+        <p class="indent" style="margin-top:10px;">
+            Menindaklanjuti Surat dari <b><?= $d['universitas_instansi']; ?></b> perihal permohonan izin magang,
+            bersama ini kami sampaikan bahwa:
+        </p>
 
-            <table class="tabel-siswa">
+        <p class="indent">
+            Sekretariat DPRD Kota Yogyakarta <b>BERSEDIA MENERIMA</b> mahasiswa untuk melaksanakan magang
+            terhitung mulai tanggal <b><?= tgl_indo($d['tgl_mulai']); ?> s.d. <?= tgl_indo($d['tgl_selesai']); ?></b>.
+            Adapun data peserta sebagai berikut:
+        </p>
+
+        <table style="margin-left:40px; margin-top:8px;">
+            <tr>
+                <td width="25%">Nama</td>
+                <td width="2%">:</td>
+                <td><b><?= $d['nama_lengkap']; ?></b></td>
+            </tr>
+            <tr>
+                <td>NIM / NIS</td>
+                <td>:</td>
+                <td><?= $d['nim_nis']; ?></td>
+            </tr>
+            <tr>
+                <td>Jurusan</td>
+                <td>:</td>
+                <td><?= $d['jurusan']; ?></td>
+            </tr>
+            <tr>
+                <td>Penempatan</td>
+                <td>:</td>
+                <td><?= $d['nama_bagian']; ?></td>
+            </tr>
+        </table>
+
+        <p class="indent" style="margin-top:10px;">
+            Demikian atas perhatian dan kerjasamanya kami ucapkan terima kasih.
+        </p>
+
+        <table style="margin-top:30px;">
+            <tr>
+                <td width="50%"></td>
+                <td width="50%" class="center">
+                    <p>Plt. Sekretaris DPRD Kota Yogyakarta</p>
+                    <p>Bagian Administrasi Umum</p><br><br><br>
+                    <p class="bold"><u>ANTONIUS BAMBANG AGUNG ADRIJANTO, S.I.P</u></p>
+                    <p>NIP. 19710630 199603 1 003</p>
+                </td>
+            </tr>
+        </table>
+
+        <!-- ================= FOOTER ================= -->
+        <div style="mso-element:footer" id="f1">
+            <table>
                 <tr>
-                    <td width="150px">Nama</td>
-                    <td>: <strong><?= $d['nama_lengkap']; ?></strong></td>
-                </tr>
-                <tr>
-                    <td>NIM / NIS</td>
-                    <td>: <?= $d['nim_nis']; ?></td>
-                </tr>
-                <tr>
-                    <td>Program Studi</td>
-                    <td>: <?= $d['jurusan']; ?></td>
-                </tr>
-                 <tr>
-                    <td>Penempatan</td>
-                    <td>: <?= $d['nama_bagian'] ?? 'Sekretariat DPRD'; ?></td>
+                    <td width="15%" align="center">
+                        <img src="<?= $segoro ?>" width="60">
+                    </td>
+                    <td width="85%" class="center">
+                        <div class="slogan-title">SEGOROAMARTO</div>
+                        <p class="slogan-desc">
+                            SEMANGAT GOTONG ROYONG AGAWE MAJUNE<br>
+                            NGAYOGYAKARTO KEMANDIRIAN - KEDISIPLINAN -<br>
+                            KEPEDULIAN - KEBERSAMAAN
+                        </p>
+                    </td>
                 </tr>
             </table>
-
-            <p>Demikian atas perhatiannya kami ucapkan terima kasih.</p>
         </div>
+        <!-- ========================================= -->
 
-        <div class="ttd-container">
-            <div class="ttd-jabatan">Sekretaris DPRD,</div>
-            <br><br><br><br> <div class="ttd-nama">Antonius Bambang Agung Adrijanto, S.I.P.</div>
-            <div>NIP. 19710630 199603 1 003</div>
-        </div>
     </div>
-
 </body>
+
 </html>
